@@ -1,0 +1,98 @@
+/*return Arrays.stream(cases)
+                .collect(Collectors.collectingAndThen(
+                        Collectors.groupingBy(
+                                slip -> {
+                                    return Arrays.asList(slip.getCedants_id(), slip.getSlipes_prime_id(),
+                                            slip.getBranch());
+                                }),
+                        m -> m.entrySet()
+                                .stream()
+                                .map(
+                                        e -> e.getValue()
+                                                .stream()
+                                                .filter(c -> Objects.equals(
+                                                        cedantRepository.getCedantRegionId(c.getCedants_id()),
+                                                        qp.get("region_id")))
+                                                .filter(c -> Objects.equals(
+                                                        cedantRepository.getCedantCountryId(c.getCedants_id()),
+                                                        qp.get("country_id")))
+                                                .filter(c -> Objects.equals(
+                                                        cedantRepository.getCedantGroupId(c.getCedants_id()),
+                                                        qp.get("group_id")))
+                                                .filter(c -> Objects.equals(
+                                                        cedantRepository.getCedantTypeId(c.getCedants_id()),
+                                                        qp.get("cedant_type_id")))
+                                                .filter(c -> Objects.equals(
+                                                        cedantRepository.getCedantId(c.getCedants_id()),
+                                                        qp.get("cedant_id")))
+                                                .filter(c -> Objects.equals(
+                                                        slipRepository.getValidationStatus(c.getSlipes_prime_id()),
+                                                        qp.get("validation_status")))
+                                                .filter(c -> Objects.equals(
+                                                        slipRepository.getConfirmationStatus(c.getSlipes_prime_id()),
+                                                        qp.get("confirmation_status")))
+                                                .filter(c -> Objects.equals(
+                                                        this.getDate(slipRepository
+                                                                .getPublishedDate(c.getSlipes_prime_id())),
+                                                        qp.get("published_date")))
+                                                .filter(c -> Objects.equals(
+                                                        slipRepository.getEditedPeriode(c.getSlipes_prime_id()),
+                                                        qp.get("edited_period")))
+                                                .filter(c -> Objects.equals(c.getBranch(), qp.get("branche")))
+                                                .map(c -> this.createNewDataInstance(
+                                                        slipRepository.findSlipeById(c.getSlipes_prime_id().getOid()),
+                                                        qp.get("branche"))))
+                                .collect(Collectors.toList())));
+
+        
+         * return Arrays.stream(cases).collect(
+         * Collectors.groupingBy(
+         * slip -> {
+         * return Arrays.asList(slip.getCedants_id(), slip.getSlipes_prime_id(),
+         * slip.getBranch());
+         * }, Collectors.toList()));
+         * 
+         * 
+         * return Arrays.stream(cases)
+         * .filter(c ->
+         * Objects.equals(cedantRepository.getCedantRegionId(c.getCedants_id()),
+         * qp.get("region_id")))
+         * .filter(c ->
+         * Objects.equals(cedantRepository.getCedantCountryId(c.getCedants_id()),
+         * qp.get("country_id")))
+         * .filter(c ->
+         * Objects.equals(cedantRepository.getCedantGroupId(c.getCedants_id()),
+         * qp.get("group_id")))
+         * .filter(c ->
+         * Objects.equals(cedantRepository.getCedantTypeId(c.getCedants_id()),
+         * qp.get("cedant_type_id")))
+         * .filter(c -> Objects.equals(cedantRepository.getCedantId(c.getCedants_id()),
+         * qp.get("cedant_id")))
+         * .filter(c ->
+         * Objects.equals(slipRepository.getValidationStatus(c.getSlipes_prime_id()),
+         * qp.get("validation_status")))
+         * .filter(c ->
+         * Objects.equals(slipRepository.getConfirmationStatus(c.getSlipes_prime_id()),
+         * qp.get("confirmation_status")))
+         * .filter(c -> Objects.equals(this.getDate(slipRepository.getPublishedDate(c.
+         * getSlipes_prime_id())),
+         * qp.get("published_date")))
+         * .filter(c ->
+         * Objects.equals(slipRepository.getEditedPeriode(c.getSlipes_prime_id()),
+         * qp.get("edited_period")))
+         * .filter(c -> Objects.equals(c.getBranch(), qp.get("branche")))
+         * .map(c ->
+         * this.createNewDataInstance(slipRepository.findSlipeById(c.getSlipes_prime_id(
+         * ).getOid()),
+         * qp.get("branche")))
+         * .collect(Collectors.groupingBy(
+         * slip -> {
+         * return Arrays.asList(slip.getCedants_id(), slip.getSlipes_prime_id(),
+         * slip.getBranch());
+         * }, Collectors.toList()
+         * ));
+         */
+
+        /*
+         * SELECT * FROM cases WHERE [conditions] GROUP BY
+         */
