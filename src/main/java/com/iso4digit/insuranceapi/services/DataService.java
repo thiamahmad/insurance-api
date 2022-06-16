@@ -49,12 +49,11 @@ public class DataService {
         for (CaseType c : cases) {
             String key = c.getCedants_id().getOid().concat(c.getSlipes_prime_id().getOid()).concat(c.getBranch());
             if (this.match(c, qp)) {
+                BigDecimal prime = BigDecimal.valueOf(c.getPremium_ht() * 0.36);
                 if (datas.get(key) == null) {
                     Slip slipPremium = sr.findSlipeById(c.getSlipes_prime_id().getOid());
-                    BigDecimal prime = BigDecimal.valueOf(c.getPremium_ht() * 0.36);
                     datas.put(key, this.createData(slipPremium, qp.get("branche"), prime));
                 } else {
-                    BigDecimal prime = datas.get(key).getCalculatedREC();
                     prime = BigDecimal.valueOf(c.getPremium_ht() * 0.36).add(prime);
                     datas.get(key).setCalculatedREC(prime);
                 }
