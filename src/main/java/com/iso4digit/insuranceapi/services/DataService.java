@@ -48,7 +48,7 @@ public class DataService {
         for (CaseType c : cases) {
             String key = c.getCedants_id().getOid() + c.getSlipes_prime_id().getOid() + c.getBranch();
 
-            //if (this.match(c, qp)) {
+            if (this.match(c, qp)) {
                 if (datas.get(key) == null) {
                     BigDecimal prime = BigDecimal.valueOf(c.getPremium_ht() * 0.36);
                     datas.put(key,
@@ -61,7 +61,7 @@ public class DataService {
                     prime = BigDecimal.valueOf(c.getPremium_ht() * 0.36).add(prime);
                     datas.get(key).setCalculatedREC(prime);
                 }
-            //}
+            }
 
         }
         return new ArrayList<Data>(datas.values());
