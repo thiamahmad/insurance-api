@@ -31,7 +31,7 @@ import com.iso4digit.insuranceapi.repositories.SlipRepository;
 public class DataService {
 
     @Autowired
-    private SlipRepository slipRepository;
+    private SlipRepository sr;
     @Autowired
     private CedantRepository cedantRepository;
     @Autowired
@@ -45,27 +45,22 @@ public class DataService {
         CaseType[] cases = caseRepository.getCases();
 
         Map<String, Data> datas = new HashMap<>();
-        for (CaseType c : cases) {
-            String key = c.getCedants_id().getOid() + c.getSlipes_prime_id().getOid() + c.getBranch();
 
+        for (CaseType c : cases) {
+            String key = c.getCedants_id().getOid().concat(c.getSlipes_prime_id().getOid()).concat(c.getBranch());
             if (this.match(c, qp)) {
                 if (datas.get(key) == null) {
+                    Slip slipPremium = sr.findSlipeById(c.getSlipes_prime_id().getOid());
                     BigDecimal prime = BigDecimal.valueOf(c.getPremium_ht() * 0.36);
-                    datas.put(key,
-                            this.createNewDataInstance(
-                                    slipRepository.findSlipeById(c.getSlipes_prime_id().getOid()),
-                                    qp.get("branche"),
-                                    prime));
+                    datas.put(key, this.createData(slipPremium, qp.get("branche"), prime));
                 } else {
                     BigDecimal prime = datas.get(key).getCalculatedREC();
                     prime = BigDecimal.valueOf(c.getPremium_ht() * 0.36).add(prime);
                     datas.get(key).setCalculatedREC(prime);
                 }
             }
-
         }
         return new ArrayList<Data>(datas.values());
-
     }
 
     private boolean match(CaseType c, Map<String, String> qp) {
@@ -74,17 +69,14 @@ public class DataService {
                 && Objects.equals(cedantRepository.getCedantGroupId(c.getCedants_id()), qp.get("group_id"))
                 && Objects.equals(cedantRepository.getCedantTypeId(c.getCedants_id()), qp.get("cedant_type_id"))
                 && Objects.equals(cedantRepository.getCedantId(c.getCedants_id()), qp.get("cedant_id"))
-                && Objects.equals(slipRepository.getValidationStatus(c.getSlipes_prime_id()),
-                        qp.get("validation_status"))
-                && Objects.equals(slipRepository.getConfirmationStatus(c.getSlipes_prime_id()),
-                        qp.get("confirmation_status"))
-                && Objects.equals(this.getDate(slipRepository.getPublishedDate(c.getSlipes_prime_id())),
-                        qp.get("published_date"))
-                && Objects.equals(slipRepository.getEditedPeriode(c.getSlipes_prime_id()), qp.get("edited_period"))
+                && Objects.equals(sr.getValidationStatus(c.getSlipes_prime_id()),qp.get("validation_status"))
+                && Objects.equals(sr.getConfirmationStatus(c.getSlipes_prime_id()),qp.get("confirmation_status"))
+                && Objects.equals(this.getDate(sr.getPublishedDate(c.getSlipes_prime_id())),qp.get("published_date"))
+                && Objects.equals(sr.getEditedPeriode(c.getSlipes_prime_id()), qp.get("edited_period"))
                 && Objects.equals(c.getBranch(), qp.get("branche"));
     }
 
-    private Data createNewDataInstance(Slip s, String branche, BigDecimal prime) {
+    private Data createData(Slip s, String branche, BigDecimal prime) {
         Data data = new Data();
 
         Cedant cedant = cedantRepository.findCedantById(s.getCedants_id().getOid());
@@ -101,13 +93,12 @@ public class DataService {
 
     }
 
+    /*
+     * No so good. I'Will change it ;-)
+     */
     private String getDate(String date) {
         String[] split = date.split(" ");
         return split[0];
-    }
-
-    private LocalDate convertEditedDate(String ed) {
-        return LocalDate.parse(ed, DateTimeFormatter.ofPattern("MMMM yyyy"));
     }
 
 }
