@@ -1,0 +1,82 @@
+{
+	"info": {
+		"_postman_id": "65a24e6a-96d9-4ccf-8f63-43ed53723369",
+		"name": "INSURANCE_API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET_DATA_WITH_FILTERS",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"address\": \"string\",\n  \"email\": \"string\",\n  \"firstName\": \"string\",\n  \"id\": 0,\n  \"lastName\": \"string\",\n  \"phoneNumber\": \"string\",\n  \"status\": {},\n  \"username\": \"string\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/datas?region_id=5d470354a8047a091746eaa3&country_id=5da8198f329d87383208ea42&group_id=5dee6307329d87068941cc02&cedant_type_id=5d5eb11454386910f603c9c1&cedant_id=5ec3e07e329d8748f31aa8c2&validation_status=Partial Verified&confirmation_status=Confirmed&published_date=2020-10-31&edited_period=January 2020&branche=AUTOMOBILE",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"datas"
+					],
+					"query": [
+						{
+							"key": "region_id",
+							"value": "5d470354a8047a091746eaa3"
+						},
+						{
+							"key": "country_id",
+							"value": "5da8198f329d87383208ea42"
+						},
+						{
+							"key": "group_id",
+							"value": "5dee6307329d87068941cc02"
+						},
+						{
+							"key": "cedant_type_id",
+							"value": "5d5eb11454386910f603c9c1"
+						},
+						{
+							"key": "cedant_id",
+							"value": "5ec3e07e329d8748f31aa8c2"
+						},
+						{
+							"key": "validation_status",
+							"value": "Partial Verified"
+						},
+						{
+							"key": "confirmation_status",
+							"value": "Confirmed"
+						},
+						{
+							"key": "published_date",
+							"value": "2020-10-31"
+						},
+						{
+							"key": "edited_period",
+							"value": "January 2020"
+						},
+						{
+							"key": "branche",
+							"value": "AUTOMOBILE"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

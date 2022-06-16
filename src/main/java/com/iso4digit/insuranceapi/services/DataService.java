@@ -1,14 +1,9 @@
 package com.iso4digit.insuranceapi.services;
 
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -19,7 +14,6 @@ import org.springframework.stereotype.Service;
 import com.iso4digit.insuranceapi.models.CaseType;
 import com.iso4digit.insuranceapi.models.Cedant;
 import com.iso4digit.insuranceapi.models.Data;
-import com.iso4digit.insuranceapi.models.Id;
 import com.iso4digit.insuranceapi.models.Slip;
 import com.iso4digit.insuranceapi.repositories.BrancheRepository;
 import com.iso4digit.insuranceapi.repositories.CaseRepository;
@@ -61,24 +55,23 @@ public class DataService {
 
     public List<Data> getData(Map<String, String> qp) {
         CaseType[] cases = caseRepository.getCases();
-        System.out.println("Parameters are " + qp.entrySet());
+        
         return Arrays.stream(cases)
                 .filter(c -> Objects.equals(cedantRepository.getCedantRegionId(c.getCedants_id()), qp.get("region_id")))
-                /*.filter(c -> Objects.equals(cedantRepository.getCedantCountryId(c.getCedants_id()), qp.get("country_id")))
+                .filter(c -> Objects.equals(cedantRepository.getCedantCountryId(c.getCedants_id()), qp.get("country_id")))
                 .filter(c -> Objects.equals(cedantRepository.getCedantGroupId(c.getCedants_id()), qp.get("group_id")))
                 .filter(c -> Objects.equals(cedantRepository.getCedantTypeId(c.getCedants_id()),qp.get("cedant_type_id")))
                 .filter(c -> Objects.equals(cedantRepository.getCedantId(c.getCedants_id()), qp.get("cedant_id")))
-                */
-                //.filter(c -> Objects.equals(slipRepository.getValidationStatus(c.getSlipes_prime_id()), qp.get("validation_status")))
-                //.filter(c -> Objects.equals(slipRepository.getConfirmationStatus(c.getSlipes_prime_id()), qp.get("confirmation_status")))
-                //.filter(c -> Objects.equals(this.formateDate(slipRepository.getPublishedDate(c.getSlipes_prime_id())),this.formateDate(qp.get("published_date"))))
-                //.filter(c -> Objects.equals(this.formateDate(slipRepository.getEditedPeriode(c.getSlipes_prime_id())),this.formateDate(qp.get("edited_periode"))))
-                //.filter(c -> Objects.equals(c.getBranches_id().getOid(), qp.get("branche_id")))
-                .map(c -> this.createNewDataInstance(slipRepository.findSlipeById(c.getSlipes_prime_id().getOid()), qp.get("branche_id")))
+                .filter(c -> Objects.equals(slipRepository.getValidationStatus(c.getSlipes_prime_id()), qp.get("validation_status")))
+                .filter(c -> Objects.equals(slipRepository.getConfirmationStatus(c.getSlipes_prime_id()), qp.get("confirmation_status")))
+                .filter(c -> Objects.equals(this.getDate(slipRepository.getPublishedDate(c.getSlipes_prime_id())),qp.get("published_date")))
+                .filter(c -> Objects.equals(slipRepository.getEditedPeriode(c.getSlipes_prime_id()),qp.get("edited_period")))
+                .filter(c -> Objects.equals(c.getBranch(), qp.get("branche")))
+                .map(c -> this.createNewDataInstance(slipRepository.findSlipeById(c.getSlipes_prime_id().getOid()), qp.get("branche")))
                 .collect(Collectors.toList());
     }
 
-    private Data createNewDataInstance(Slip s, String brancheId) {
+    private Data createNewDataInstance(Slip s, String branche) {
         Data data = new Data();
 
         Cedant cedant = cedantRepository.findCedantById(s.getCedants_id().getOid());
@@ -89,13 +82,15 @@ public class DataService {
         data.setValidationStatus(s.getValidation_status());
         data.setConfirmationStatus(s.getConfirmation_status());
         data.setPublicationDate(s.getPublished_date());
-        data.setBranche(brancheRepository.findBrancheById(brancheId).getName());
-
+        data.setBranche(brancheRepository.findBrancheByName(branche).getName());
         return data;
+
+      
     }
 
-    private LocalDate formateDate(String date) {
-        return LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    private String getDate(String date) {
+        String[] split = date.split(" ");
+        return split[0];
     }
 
     private LocalDate convertEditedDate(String ed){

@@ -22,19 +22,7 @@ public class Data {
     private String branche;
     private BigDecimal calculatedREC;
     
-    public Data() {
-    }
-    public Data(String references, String country, String cedants, String validationStatus, String confirmationStatus,
-            String publicationDate, String branche, BigDecimal calculatedREC) {
-        this.references = references;
-        this.country = country;
-        this.cedants = cedants;
-        this.validationStatus = validationStatus;
-        this.confirmationStatus = confirmationStatus;
-        this.publicationDate = publicationDate;
-        this.branche = branche;
-        this.calculatedREC = calculatedREC;
-    }
+    
     
     public String getReferences() {
         return references;

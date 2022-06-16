@@ -34,6 +34,13 @@ public class BrancheRepository {
                 .orElse(null);
     }
 
+    public Branche findBrancheByName(String name) {
+        return Arrays.stream(branches)
+                .filter(branche -> Objects.equals(branche.getName(), name))
+                .findFirst()
+                .orElse(null);
+    }
+
     public Branche findCendantBranche(Cedant d) {
         return Arrays.stream(branches)
                 .filter(c -> Objects.equals(c.get_id().getOid(), d.getCountries_id().getOid()))
